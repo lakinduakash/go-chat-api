@@ -20,7 +20,9 @@ type Message struct {
 func (c *Client) Read() {
 	defer func() {
 		c.Pool.Unregister <- c
-		c.Conn.Close()
+		if err := c.Conn.Close(); err != nil {
+			log.Fatal("Err when closing connection")
+		}
 	}()
 
 	for {

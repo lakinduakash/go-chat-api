@@ -6,11 +6,15 @@ import (
 	"net/http"
 )
 
+const address = ":8080"
+
 func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("WebSocket Endpoint Hit")
 	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
-		fmt.Fprintf(w, "%+v\n", err)
+		if _, err := fmt.Fprintf(w, "%+v\n", err); err != nil {
+			return
+		}
 	}
 
 	client := &websocket.Client{
@@ -34,5 +38,8 @@ func setupRoutes() {
 func main() {
 	fmt.Println("Distributed Chat App")
 	setupRoutes()
-	http.ListenAndServe(":8080", nil)
+	if err := http.ListenAndServe(address, nil); err != nil {
+		fmt.Println("Cannot serve on port ", address)
+		return
+	}
 }
