@@ -8,6 +8,9 @@ import {SocketService} from "../socket.service";
 })
 export class ChatComponent implements OnInit {
 
+  msg
+  history:MessageEvent[]=[]
+
   constructor(public wsService:SocketService) { }
 
   ngOnInit() {
@@ -24,6 +27,7 @@ export class ChatComponent implements OnInit {
 
     socket.onmessage = msg => {
       console.log(msg);
+      this.history.push(msg)
     };
 
     socket.onclose = event => {
@@ -33,6 +37,12 @@ export class ChatComponent implements OnInit {
     socket.onerror = error => {
       console.log("Socket Error: ", error);
     };
+  }
+
+  sendMsg(msg) {
+    let socket = this.wsService.ws
+    console.log("sending msg: ", msg);
+    socket.send(msg);
   };
 
 }

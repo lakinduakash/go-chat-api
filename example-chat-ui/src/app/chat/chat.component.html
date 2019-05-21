@@ -1,3 +1,17 @@
-<p>
-  chat works!
-</p>
+<label>Massage
+<input type="text" [(ngModel)]="msg">
+</label>
+<button (click)="sendMsg(msg)">
+  Send
+</button>
+
+<div>
+
+  <ng-container *ngFor="let msg of history">
+    <div>
+      <h5>
+        {{msg.data}}
+      </h5>
+    </div>
+  </ng-container>
+</div>
