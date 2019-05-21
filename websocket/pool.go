@@ -23,6 +23,10 @@ func NewPool() *Pool {
 
 }
 
+func (pool *Pool) GetClients() map[string]*Client {
+	return pool.Clients
+}
+
 func (pool *Pool) Start() {
 	for {
 		select {

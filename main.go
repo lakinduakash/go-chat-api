@@ -1,4 +1,4 @@
-package main
+package go_chat_api
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-const address = ":28960"
+var pool *websocket.Pool
 
 func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("WebSocket Endpoint Hit")
@@ -26,20 +26,28 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	client.Read()
 }
 
-func setupRoutes() {
-	pool := websocket.NewPool()
+func setupRoutes(path string) {
+	pool = websocket.NewPool()
 	go pool.Start()
 
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		serveWs(pool, w, r)
 	})
 }
 
-func main() {
+//port must have ":number" format
+// Ex: port:=":8080"
+//path is a string,which should ends with "/"
+func StartSever(port string, path string) {
 	fmt.Println("Distributed Chat App")
-	setupRoutes()
-	if err := http.ListenAndServe(address, nil); err != nil {
-		fmt.Println("Cannot serve on port ", address)
+	setupRoutes(path)
+	if err := http.ListenAndServe(port, nil); err != nil {
+		fmt.Println("Cannot serve on port ", port)
 		return
 	}
+}
+
+//Get connected client list to sever
+func GetClients() map[string]*websocket.Client {
+	return pool.GetClients()
 }
