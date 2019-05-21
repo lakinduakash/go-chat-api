@@ -37,7 +37,7 @@ func setupRoutes(path string) {
 
 //port must have ":number" format
 // Ex: port:=":8080"
-//path is a string,which should ends with "/"
+//path is a string,which should start with "/"
 func StartSever(port string, path string) {
 	fmt.Println("Distributed Chat App")
 	setupRoutes(path)
