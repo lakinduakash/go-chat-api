@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-const address = ":8080"
+const address = ":28960"
 
 func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("WebSocket Endpoint Hit")
