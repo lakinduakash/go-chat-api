@@ -37,12 +37,12 @@ func (c *Client) Read() {
 		_, p, err := c.Conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
-			return
+			continue
 		}
-
 		var body MessageBody
-		if err := json.Unmarshal([]byte(p), &body); err != nil {
-			return
+		if err := json.Unmarshal(p, &body); err != nil {
+			log.Println(err)
+			continue
 		}
 		body.From = c.ID
 		message := Message{Type: 1, Body: body}

@@ -32,7 +32,6 @@ func (pool *Pool) Start() {
 			fmt.Println("New user", client.ID)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
 			for _, client2 := range pool.Clients {
-				fmt.Println()
 				if err := client2.Conn.WriteJSON(Message{Type: 2, Body: MessageBody{Message: client.ID}}); err != nil {
 					log.Fatal("Error on write")
 					continue
