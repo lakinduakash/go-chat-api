@@ -1,3 +1,4 @@
+<h5>{{myId}}</h5>
 <label>Massage
 <input type="text" [(ngModel)]="msg">
 </label>
@@ -6,11 +7,20 @@
 </button>
 
 <div>
+  <label>To user
+  <select [(ngModel)]="toUser">
+    <option [value]="id" *ngFor="let id of connectedList">
+      {{id}}
+    </option>
+  </select>
+  </label>
+</div>
 
+<div>
   <ng-container *ngFor="let msg of history">
     <div>
       <h5>
-        {{msg.data}}
+        {{msg.from}}:{{msg.message}}
       </h5>
     </div>
   </ng-container>
