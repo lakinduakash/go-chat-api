@@ -13,11 +13,11 @@ type ClientBCastChannel struct {
 	clientList []chan Client
 }
 
-func NewMessageBCastChannel(size int) *MessageBCastChannel {
+func newMessageBCastChannel(size int) *MessageBCastChannel {
 	return &MessageBCastChannel{clientList: make([]chan Message, size)}
 }
 
-func NewClientBCastChannel(size int) *ClientBCastChannel {
+func newClientBCastChannel(size int) *ClientBCastChannel {
 	return &ClientBCastChannel{clientList: make([]chan Client, size)}
 }
 
@@ -33,7 +33,7 @@ func (bc *ClientBCastChannel) AddWorker(c chan Client) {
 	mutex2.Unlock()
 }
 
-func (bc *MessageBCastChannel) BroadCast(data Message) {
+func (bc *MessageBCastChannel) broadCast(data Message) {
 	mutex1.Lock()
 	for _, v := range bc.clientList {
 		if v != nil {
@@ -45,7 +45,7 @@ func (bc *MessageBCastChannel) BroadCast(data Message) {
 	mutex1.Unlock()
 }
 
-func (bc *ClientBCastChannel) BroadCast(data Client) {
+func (bc *ClientBCastChannel) broadCast(data Client) {
 	mutex2.Lock()
 	for _, v := range bc.clientList {
 		if v != nil {

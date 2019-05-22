@@ -52,18 +52,21 @@ func GetClients() map[string]*websocket.Client {
 	return pool.GetClients()
 }
 
+//This function will notify when new user is registered to chat server
 func ListenClientAddChanges() chan websocket.Client {
 	c := make(chan websocket.Client)
 	websocket.CBR.AddWorker(c)
 	return c
 }
 
+//This function will notify when a user is unregiterd from chat server
 func ListenClientRemoveChanges() chan websocket.Client {
 	c := make(chan websocket.Client)
 	websocket.CBU.AddWorker(c)
 	return c
 }
 
+//This function will notify when new message is arrived to chat server
 func ListenMessageChanges() chan websocket.Message {
 	c := make(chan websocket.Message)
 	websocket.MB.AddWorker(c)
