@@ -9,8 +9,9 @@ import {SocketService} from "../socket.service";
 export class ChatComponent implements OnInit {
 
   msg
+  nickName
   history:MessageBody[]=[]
-  connectedList:string[]=[]
+  connectedList:Map<string,string> =new Map()
   toUser:string
 
   counter=0
@@ -35,16 +36,24 @@ export class ChatComponent implements OnInit {
       this.counter++
       let data =JSON.parse(msg.data) as SocketMessage
 
-      if(data.type ==1)
-        this.history.push(data.body)
-      else if(data.type ==2) {
-        if(this.counter==1)
-          this.myId=data.body.message
-        else
-          this.connectedList.push(data.body.message)
+      switch (data.type) {
+        case 1:
+          this.history.push(data.body)
+          break
+        case 2:
+          if(this.counter==1)
+            this.myId=data.body.message
+          else
+              this.connectedList.set(data.body.message,data.body.nickname)
+          break
+        case 3:
+          this.connectedList.delete(data.body.message)
+          break
+        case 4:
+          this.connectedList.set(data.body.from,data.body.nickname)
+
+
       }
-      else if(data.type ==3)
-        this.connectedList=this.connectedList.filter(val=>val!= data.body.message)
 
     };
 
@@ -65,7 +74,18 @@ export class ChatComponent implements OnInit {
       message:msg
     }
     socket.send(JSON.stringify(body));
-  };
+  }
+
+  sendNickName(name){
+    let socket = this.wsService.ws
+    let body:MessageBody={
+      from:this.myId,
+      to:"",
+      message:"",
+      nickname:name
+    }
+    socket.send(JSON.stringify(body));
+  }
 
 }
 
@@ -73,6 +93,7 @@ export interface MessageBody {
   from
   to
   message
+  nickname?
 }
 
 export interface SocketMessage {

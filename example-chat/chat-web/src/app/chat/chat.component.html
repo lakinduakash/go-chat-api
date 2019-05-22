@@ -6,11 +6,18 @@
   Send
 </button>
 
+
+<label>Set user nickName:</label>
+<input type="text" [(ngModel)]="nickName">
+<button (click)="sendNickName(nickName)">
+  Send
+</button>
+
 <div>
   <label>To user
   <select [(ngModel)]="toUser">
-    <option [value]="id" *ngFor="let id of connectedList">
-      {{id}}
+    <option [value]="key.key" *ngFor="let key of connectedList | keyvalue">
+      {{key.value||key.key}}
     </option>
   </select>
   </label>
