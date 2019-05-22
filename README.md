@@ -2,7 +2,11 @@
 
 [![GoDoc](https://godoc.org/github.com/lakinduakash/go-chat-api?status.svg)](https://godoc.org/github.com/lakinduakash/go-chat-api)
 
-Required Go version >=1.11  
+Required Go version >=1.11
+
+To use module
+
+`go get github.com/lakinduakash/go-chat-api`
 
 To run example go server
 
