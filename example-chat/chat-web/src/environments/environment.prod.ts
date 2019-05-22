@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  chat_sever:"localhost:28960"
+  chat_sever:"35.240.130.168:28960"
 };
