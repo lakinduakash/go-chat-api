@@ -57,3 +57,15 @@ func ListenClientAddChanges() chan websocket.Client {
 	websocket.CBR.AddWorker(c)
 	return c
 }
+
+func ListenClientRemoveChanges() chan websocket.Client {
+	c := make(chan websocket.Client)
+	websocket.CBU.AddWorker(c)
+	return c
+}
+
+func ListenMessageChanges() chan websocket.Message {
+	c := make(chan websocket.Message)
+	websocket.MB.AddWorker(c)
+	return c
+}
