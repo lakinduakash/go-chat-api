@@ -32,7 +32,8 @@ export class ChatComponent implements OnInit {
     };
 
     socket.onmessage = msg => {
-      console.log(msg)
+      //console.log(msg)
+
       this.counter++
       let data =JSON.parse(msg.data) as SocketMessage
 
@@ -74,6 +75,8 @@ export class ChatComponent implements OnInit {
       message:msg
     }
     socket.send(JSON.stringify(body));
+
+    this.history.push(body)
   }
 
   sendNickName(name){
