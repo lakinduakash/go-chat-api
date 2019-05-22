@@ -2,7 +2,6 @@ package websocket
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/websocket"
 	"log"
 )
@@ -20,9 +19,10 @@ type Message struct {
 }
 
 type MessageBody struct {
-	From    string `json:"from"`
-	To      string `json:"to"`
-	Message string `json:"message"`
+	From     string `json:"from"`
+	To       string `json:"to"`
+	Message  string `json:"message"`
+	Nickname string `json:"nickname"`
 }
 
 func (c *Client) Read() {
@@ -44,9 +44,20 @@ func (c *Client) Read() {
 			log.Println(err)
 			continue
 		}
-		body.From = c.ID
-		message := Message{Type: 1, Body: body}
+
+		var message Message
+
+		if body.Nickname != "" {
+			c.Nickname = body.Nickname
+			body.From = c.ID
+			message = Message{Type: 4, Body: body}
+		} else {
+			body.From = c.ID
+			message = Message{Type: 1, Body: body}
+		}
+
 		c.Pool.Broadcast <- &message
-		fmt.Printf("Message Received: %+v\n", message)
+
+		//fmt.Printf("Message Received: %+v\n", message)
 	}
 }

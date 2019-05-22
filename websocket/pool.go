@@ -48,6 +48,15 @@ func (pool *Pool) Start() {
 				}
 
 			}
+
+			for _, client2 := range pool.Clients {
+				if err := client.Conn.WriteJSON(Message{Type: 2, Body: MessageBody{Message: client2.ID, Nickname: client2.Nickname}}); err != nil {
+					log.Fatal("Error on write")
+					continue
+				}
+
+			}
+
 			break
 		case client := <-pool.Unregister:
 			delete(pool.Clients, client.ID)
@@ -70,6 +79,16 @@ func (pool *Pool) Start() {
 					if err := client.Conn.WriteJSON(*message); err != nil {
 						fmt.Println(err)
 					}
+				}
+			} else if message.Type == 4 {
+
+				for _, client := range pool.Clients {
+
+					if err := client.Conn.WriteJSON(*message); err != nil {
+						fmt.Println(err)
+						continue
+					}
+
 				}
 			} else {
 				//fmt.Println("Sending message to all clients in Pool")
