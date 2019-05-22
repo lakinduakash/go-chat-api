@@ -51,3 +51,9 @@ func StartSever(port string, path string) {
 func GetClients() map[string]*websocket.Client {
 	return pool.GetClients()
 }
+
+func ListenClientAddChanges() chan websocket.Client {
+	c := make(chan websocket.Client)
+	websocket.CBR.AddWorker(c)
+	return c
+}

@@ -23,6 +23,10 @@ func NewPool() *Pool {
 
 }
 
+var CBR = NewClientBCastChannel(2)
+var CBU = NewClientBCastChannel(2)
+var CBM = NewMessageBCastChannel(2)
+
 func (pool *Pool) GetClients() map[string]*Client {
 	return pool.Clients
 }
@@ -35,6 +39,8 @@ func (pool *Pool) Start() {
 			pool.Clients[client.ID] = client
 			fmt.Println("New user", client.ID)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
+			CBR.BroadCast(*client)
+
 			for _, client2 := range pool.Clients {
 				if err := client2.Conn.WriteJSON(Message{Type: 2, Body: MessageBody{Message: client.ID}}); err != nil {
 					log.Fatal("Error on write")
@@ -46,6 +52,7 @@ func (pool *Pool) Start() {
 		case client := <-pool.Unregister:
 			delete(pool.Clients, client.ID)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
+			CBU.BroadCast(*client)
 			for _, client := range pool.Clients {
 				if err := client.Conn.WriteJSON(Message{Type: 3, Body: MessageBody{Message: client.ID}}); err != nil {
 					log.Fatal("Error on write")
@@ -55,6 +62,7 @@ func (pool *Pool) Start() {
 			break
 		case message := <-pool.Broadcast:
 
+			CBM.BroadCast(*message)
 			if message.Body.To != "" {
 				fmt.Println("Sending message to", message.Body.To)
 
