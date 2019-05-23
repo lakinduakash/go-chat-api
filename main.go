@@ -47,6 +47,16 @@ func StartSever(port string, path string) {
 	}
 }
 
+//start with TLS support. Provide privatekey and cert path. Then you need to usee "wss" protocole in client
+func StartSeverTLS(port string, path string, privatekey string, cert string) {
+	fmt.Println("Distributed Chat App")
+	setupRoutes(path)
+	if err := http.ListenAndServeTLS(port, cert, privatekey, nil); err != nil {
+		fmt.Println("Cannot serve on port ", port)
+		return
+	}
+}
+
 //Get connected client list to sever
 func GetClients() map[string]*websocket.Client {
 	return pool.GetClients()
