@@ -48,7 +48,7 @@ func main() {
 ```
 
 If you need to get list of clients registered currently, use `chat_api.GetClients()`.
-It will return map of clients and keys are UUIDs.
+It will return map of clients and keys which are UUIDs.
 
 To run example go server
 
